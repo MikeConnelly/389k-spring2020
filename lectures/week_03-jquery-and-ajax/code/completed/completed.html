@@ -25,7 +25,7 @@
         <input id="category_field" type="text" placeholder="Ex: Animal">
         <button id="search_button">Search! </button>
         <button id="clear_button"> Clear Results </button>
-        <div id="article_container"></div>
+        <div id="results_container"></div>
     </article>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.js"></script>
     <script>
@@ -40,16 +40,16 @@
         //     $("#article_container").append("<article><h2>Some content</h2><p>More content</p></article>");
         // })
 
-        $("#search_button").on("click", function(){
-            var categoryValue = $("#category_field").val();
-            $.get("https://api.chucknorris.io/jokes/random?category=" + categoryValue, function(data){
-                $("#article_container").append("<article><h2>" + data.value + "</h2></article>")
-            })
-        })
+        //$("#search_button").on("click", function(){
+        //    var categoryValue = $("#category_field").val();
+        //    $.get("https://api.chucknorris.io/jokes/random?category=" + categoryValue, function(data){
+        //        $("#article_container").append("<article><h2>" + data.value + "</h2></article>")
+        //    })
+        //})
 
-        $("#clear_button").on("click", function(){
-            $("#article_container").empty();
-        })
+        //$("#clear_button").on("click", function(){
+        //    $("#article_container").empty();
+        //})
 
         // NOTE - If you are getting an error about something with access & CORS, download 
         // this extension: https://chrome.google.com/webstore/detail/allow-control-allow-origi/nlfbmbojpeacfghkpbjhddihlkkiljbi?hl=en
@@ -57,13 +57,27 @@
         // and try again!
 
         // WS - TACO SOLUTION
-        // $("#search_button").on("click", function(){
-        //     var categoryValue = $("#category_field").val();
-        //     $.get("http://taco-randomizer.herokuapp.com/random/?full-taco=true" , function(data){
-        //         $("#article_container").append("<article><h2>" + data.base_layer.recipe + "</h2></article>")
-        //     })
-        // })
+        $("#search_button").on("click", function(){
+            // var categoryValue = $("#category_field").val();
+            var input = $('#category_field').val();
+            $.get("https://api.umd.io/v0/courses/" + input, data => {
+                if (data.length === 0) {
+                    alert('course does not exist');
+                }
+                console.log(data);
+                $('#results_container').append('<h3>' + input + '</h3');
+                $('#results_container').append('<p>' + data.description + '</p>');
+            });
+            $('#clear_results').on('click', () => {
+                $('#category_field').val('');
+                $('#results_container').empty();
+            });
+            //$.get("http://taco-randomizer.herokuapp.com/random/?full-taco=true" , function(data){
+            //    $("#article_container").append("<article><h2>" + data.base_layer.recipe + "</h2></article>")
+            //})
+        });
     </script>
 </body>
 
 </html>
+
