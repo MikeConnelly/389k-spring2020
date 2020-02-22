@@ -5,44 +5,52 @@
     <title>50 State Game</title>
     <style type="text/css">
 
-
+        .col {
+            float: left;
+            width: 25%;
+        }
 
     </style>
 </head>
 
 <body>
 
-    <input id="state-input" type="text" placeholder="state" disabled="true">
+    <div class="col">
+        <input id="state-input" type="text" placeholder="state" disabled="true" autofocus>
+        
+        <h3>Timer:</h3>
+        <div id="timer">
+            <h3></h3>
+        </div>
 
-    <!--
-    2. Implement the running list of states.
-        3. How will I trigger the network request to get the number of Spanish
-        speakers in a state (on hover)?
-    -->
-    <h3>States:</h3>
-    <div id="state-list"></div>
+        <button id="start-button">START</button>
 
-    <h3>Timer:</h3>
-    <div id="timer">
-        <h3></h3>
+        <h3 id="score-label">Score:</h3>
+        <div id="score"></div>
     </div>
 
-    <h3 id="score-label">Score:</h3>
-    <div id="score"></div>
+    <div class="col">
+        <h3>States:</h3>
+        <div id="state-list"></div>
+    </div>
+    
+    <div class="col">
+        <h3 id="missed-label">Missed:</h3>
+        <div id="missed-list"></div>
+    </div>
 
-    <h3 id="missed-label">Missed:</h3>
-    <div id="missed-list"></div>
-
-    <button id="start-button">START</button>
-
-
+    <div class="col">
+        <h3>State info:</h3>
+        <div id="info"></div>
+    </div>
 
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js" type="text/javascript"></script>
     <script src="index.js" type="text/javascript"></script>
     <script type="text/javascript">
         console.log(abvMap);
 
-        let time = 5;
+        let numStates = states.length;
+        let time = 20;
         let active = false;
         let correct = [];
 
@@ -53,22 +61,32 @@
         $("#state-input").bind("change paste keyup", () => {
             const match = states.find(val => $("#state-input").val() === val);
             if (match) {
+                const index = correct.length;
                 correct.push(match);
                 states = states.filter(state => state !== match);
                 $("#state-input").val('');
-                $("#state-list").append(`<p id="state-name">${match}</p>`);
+                const $newState = $(`<p id="${index}" class="state-name">${match}</p>`);
+                $("#state-list").append($newState);
                 checkForWin();
             }
         });
 
-        $("#state-name").mouseover(() => {
-            console.log("wtf");
-            console.log($(this).html());
+        $(document).on("mouseover", ".state-name", () => {
+            $("#info").empty();
+            $("#info").append("fetching data...");
+            for (let i = 0; i < numStates; i++) {
+                if ($(`#${i}`).is(":hover")) {
+                    console.log(i);
+                    const state = $(`#${i}`).html();
+                    request(state);
+                }
+            }
         });
 
         function start() {
             states = states.concat(correct);
-            time = 5;
+            numStates = states.length;
+            time = 20;
             correct = [];
             $("#state-list").empty();
             $("#missed-list").empty();
@@ -96,12 +114,14 @@
 
         function endGame() {
             active = false;
+            let index = correct.length;
             const total = correct.length + states.length;
             const score = correct.length/total;
             $("#score").append(`<h2>${score.toFixed(2)}</h2>`);
             $("#state-input").prop("disabled", true);
             states.forEach(state => {
-                $("#missed-list").append(`<p id="state-name">${state}</p>`);
+                $("#missed-list").append(`<p id="${index}" class="state-name">${state}</p>`);
+                index++;
             });
             
             $("#start-button").prop("disabled", false);
@@ -119,6 +139,9 @@
             const code = abvMap[state];
             $.get(`https://api.census.gov/data/2013/language?get=EST,LANLABEL,NAME&for=state:${code}&LAN=625`, data => {
                 console.log(data);
+                $("#info").empty();
+                const numSpeakers = parseInt(data[1][0]);
+                $("#info").append(`spanish speakers in ${state}: ${numSpeakers.toLocaleString()}`);
             });
         }
 
