@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Michael Connelly</title>
+        <style>
+            
+            #header {
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                background-color: lightgrey;
+            }
+
+            #me {
+                transform: rotate(90deg);
+            }
+            
+            #nav {
+                display: flex;
+                flex-direction: row;
+                justify-content: center;
+                background-color: red;
+            }
+    
+            #nav li {
+                display: inline;
+                align-content: center;
+                padding: 0px 10px 0px 10px;
+            }
+    
+            .page-link {
+                color: white;
+                font-size: large;
+            }
+
+            #resume {
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+            }
+
+            #resume h3 {
+                height: 40px;
+                align-self: center;
+            }
+    
+            @media(max-width: 500px) {
+    
+                #nav {
+                    flex-direction: column;
+                    align-items: center;
+                }
+    
+                #nav li {
+                    display: block;
+                    padding: 5px 0px 5px 0px;
+                }
+            }
+
+            #resume-img {
+                display: flex;
+                justify-content: center;
+                margin: 20px 0px 20px 0px;
+            }
+    
+        </style>
+    </head>
+    <body>
+        <div id="header">
+            <img id="me" src="./res/p1_pic.jpg" alt="picture of me" height="300" width="300">
+            <h1>
+                Michael Connelly
+            </h1>
+        </div>
+        <div id="nav">
+            <ol>
+                <li>
+                    <a class="page-link" href="./index.html">About</a>
+                </li>
+                <li>
+                    <a class="page-link" href="./resume.html">Resume</a class="page-link">
+                </li>
+                <li>
+                    <a class="page-link" href="./schedule.html">Schedule</a>
+                </li>
+            </ol>
+        </div>
+        <div id="resume">
+            <h3>My Resume</h3>
+            <div id="resume-img">
+                <img src="./res/resume.PNG" alt="resume" border="5">
+            </div>
+        </div>
+    </body>
+</html>

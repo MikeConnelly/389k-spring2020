@@ -1,55 +1,127 @@
-<!--
-    Here is a starting point for the project.
-    jQuery and a index.js file have been included for you.
- -->
-
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset="UTF-8">
     <title>50 State Game</title>
     <style type="text/css">
-        /* Do not worry about doing extensive styling. Please make sure it is
-           obvious where the input bar, start button, running list of states,
-           and timer all are. */
+
+
+
     </style>
 </head>
 
 <body>
 
-    <!--
-    1. Implement the input element.
-        You'll need to answer the the following questions (and probably more):
-        1. What HTML tag inserts an input element?
-        2. How do I continuously check the contents of the input element without
-        the user hitting enter?
-        3. How do I disable the input bar if the game is not in session?
-    -->
+    <input id="state-input" type="text" placeholder="state" disabled="true">
 
     <!--
     2. Implement the running list of states.
-        1. What HTML will be inserted each time a user enters a correct state?
-        2. How can I make sure the user can see all the states he/she has
-        already entered?
         3. How will I trigger the network request to get the number of Spanish
         speakers in a state (on hover)?
-        4. How will I seperate the entered states from missed states when the
-        game is over if the user lost the game?
     -->
+    <h3>States:</h3>
+    <div id="state-list"></div>
 
-    <!--
-    3. Implement the timer. This is almost all JavaScript.
-    -->
+    <h3>Timer:</h3>
+    <div id="timer">
+        <h3></h3>
+    </div>
 
-    <!--
-    4. Implement the start button. The start button must activate the input box
-    to allow input start the timer.
-    -->
+    <h3 id="score-label">Score:</h3>
+    <div id="score"></div>
+
+    <h3 id="missed-label">Missed:</h3>
+    <div id="missed-list"></div>
+
+    <button id="start-button">START</button>
+
+
 
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js" type="text/javascript"></script>
     <script src="index.js" type="text/javascript"></script>
     <script type="text/javascript">
         console.log(abvMap);
+
+        let time = 5;
+        let active = false;
+        let correct = [];
+
+        $("#start-button").click(() => {
+            start();
+        });
+
+        $("#state-input").bind("change paste keyup", () => {
+            const match = states.find(val => $("#state-input").val() === val);
+            if (match) {
+                correct.push(match);
+                states = states.filter(state => state !== match);
+                $("#state-input").val('');
+                $("#state-list").append(`<p id="state-name">${match}</p>`);
+                checkForWin();
+            }
+        });
+
+        $("#state-name").mouseover(() => {
+            console.log("wtf");
+            console.log($(this).html());
+        });
+
+        function start() {
+            states = states.concat(correct);
+            time = 5;
+            correct = [];
+            $("#state-list").empty();
+            $("#missed-list").empty();
+            $("#score").empty();
+            $("#timer > h3").html(time);
+
+            $("#start-button").prop("disabled", true);
+            $("#state-input").prop("disabled", false);
+            active = true;
+            gameLoop();
+        }
+
+        function gameLoop() {
+            setTimeout(() => {
+                if (active) {
+                    time--;
+                    $("#timer > h3").html(time);
+                    if (time === 0) {
+                        endGame();
+                    }
+                    gameLoop();
+                }
+            }, 1000);
+        }
+
+        function endGame() {
+            active = false;
+            const total = correct.length + states.length;
+            const score = correct.length/total;
+            $("#score").append(`<h2>${score.toFixed(2)}</h2>`);
+            $("#state-input").prop("disabled", true);
+            states.forEach(state => {
+                $("#missed-list").append(`<p id="state-name">${state}</p>`);
+            });
+            
+            $("#start-button").prop("disabled", false);
+        }
+
+        function checkForWin() {
+            if (states.length === 0) {
+                endGame();
+                alert("YOU WIN!");
+            }
+        }
+
+        function request(state) {
+            console.log(state);
+            const code = abvMap[state];
+            $.get(`https://api.census.gov/data/2013/language?get=EST,LANLABEL,NAME&for=state:${code}&LAN=625`, data => {
+                console.log(data);
+            });
+        }
+
     </script>
 </body>
 
