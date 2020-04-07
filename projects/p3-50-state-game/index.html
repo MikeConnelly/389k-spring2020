@@ -116,8 +116,7 @@
             active = false;
             let index = correct.length;
             const total = correct.length + states.length;
-            const score = correct.length/total;
-            $("#score").append(`<h2>${score.toFixed(2)}</h2>`);
+            $("#score").append(`<h2>${correct.length}/${total}</h2>`);
             $("#state-input").prop("disabled", true);
             states.forEach(state => {
                 $("#missed-list").append(`<p id="${index}" class="state-name">${state}</p>`);
