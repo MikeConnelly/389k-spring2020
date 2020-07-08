@@ -1,0 +1,24 @@
+<div class="title-container">
+    <h1>{{post.title}}</h1>
+    <p>Difficulty: {{post.difficulty}}</p>
+    <p>tagged: {{post.tags}}</p>
+    <i>{{post.time}}</i>
+</div>
+<div class="content">
+    {{{post.description}}}
+</div>
+<div class="post-comment">
+    <form action="/api/comment/{{post.id}}" method="post">
+        <label for="text">Leave a comment!</label>
+        <input type="text" id="text" name="text">
+        <input type="submit" value="Submit">
+    </form>
+</div>
+<div class="comments">
+    {{#each comments}}
+    <div class="comment">
+        <p class="text">{{this.text}}</p>
+        <p class="time">{{this.time}}</p>
+    </div>
+    {{/each}}
+</div>

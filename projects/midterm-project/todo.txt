@@ -1,0 +1,23 @@
+have a delete button on each post and comment
+test delete endpoints***
+delete all comments on that post as well
+
+need sockets
+sockets now create a new post above the post list that uses title for endpoint
+
+description page? /about
+
+module?
+
+npm packages?
+
+css for comments/delete
+
+README/deployment.md
+
+deploy
+
+
+
+
+comments dont appear on random

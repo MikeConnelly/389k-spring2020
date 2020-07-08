@@ -1,0 +1,23 @@
+<div class="nav">
+  <ul>
+    <li><a href="/">Newest</a></li>
+    <li><a href="/random">Random</a></li>
+    <li><a href="/easiest">Easiest</a></li>
+    <li><a href="/hardest">Hardest</a></li>
+    <li><a href="/shortest">Shortest</a></li>
+    <li><a href="/longest">Longest</a></li>
+    <li class="dropdown">
+      <a href="javascript:void(0)" class="dropbtn">By Tag</a>
+      <div class="dropdown-content">
+        {{#if tags}}
+          {{#each tags}}
+            <a href="/tag/{{this}}" class="tag">{{this}}</a>
+          {{/each}}
+        {{else}}
+          <span>No tags yet</span>
+        {{/if}}
+      </div>
+    </li>
+  </ul>
+</div>
+<br><hr>

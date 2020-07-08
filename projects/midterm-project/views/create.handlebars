@@ -1,0 +1,42 @@
+<h1>Create New Challenge</h1>
+<article>
+    <form method="POST" action="/api/create">
+        <div class="input-field">
+            <label>Title:</label>
+            <input id='title' type="text" name="title" size="50" placeholder="Title...">
+        </div>
+        <div class="difficulty-field">
+            <label>Difficulty (1 through 5):</label>
+            <p id="difficulty-value">3</p>
+            <input id='diff' type="range" name="difficulty" min="1" max="5" onchange="updateValue(this.value);">
+        </div>
+        <div class="input-field">
+            <label>Tags:</label>
+            <input id='tags' type="text" name="tags" size="50" placeholder="Tag1 Tag2 Tag3 (seperated by spaces)">
+        </div>
+        <div class="input-field">
+            <label>Description:</label>
+            <textarea id='desc' type="text" name="description" rows="20"></textarea>
+        </div>
+        <button id="submit-post" type="submit">Create Post</button>
+    </form>
+</article>
+<script>
+    function updateValue(val) {
+        $('#difficulty-value').html(val);
+    }
+
+    $('#submit-post').click(() => {
+        var title = $('#title').val();
+        var diff = $('#diff').val();
+        var tags = $('#tags').val();
+        var desc = $('#desc').val();
+        newPost = {
+            title: title,
+            difficulty: diff,
+            tags: tags,
+            description: desc
+        };
+        socket.emit('new post', newPost);
+    })
+</script>

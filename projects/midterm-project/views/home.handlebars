@@ -1,1 +1,42 @@
-Home
+<div class="home-bar">
+	<button type="button" id="createNew">Create</button>
+	<div class="searchbar">
+		<input id="search" type="text" placeholder="Search" autocomplete="off">
+	</div>
+</div>
+
+{{#if tag}}
+<h2>Challenges Tagged: {{tag}}</h2> 
+{{else}}
+<h2>{{page}}</h2> 
+{{/if}}
+
+<div id="new-posts"></div>
+
+<div id="post-list">
+	{{#if data}}
+		{{#each data}}
+		<article class="post">
+			<h2 class="title" id={{this.id}}><a href="/post/{{this.id}}">{{this.title}}</a></h2>
+			<div class="post-header">
+				<p class="difficulty">Difficulty: {{this.difficulty}}</p>
+				<p classs="tags">Tagged: {{this.tags}}</p>
+			</div>
+			<i>{{time}}</i>
+			<hr>
+			<div class="content">
+				{{{this.preview}}}...
+			</div>
+		</article>
+		{{/each}}
+	{{else}}
+		<article>
+			<h1>There are no posts yet.</h1>
+			<a href="/create">Write your first post!</a>
+		</article>
+	{{/if}}
+</div>
+
+<article id="empty-search" style="display: none">
+    <p>No results</p>
+</article>
